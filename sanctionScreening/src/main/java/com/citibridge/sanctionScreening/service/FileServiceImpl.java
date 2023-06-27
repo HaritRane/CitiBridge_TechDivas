@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class FileServiceImpl implements FileService{
     @Override
     public boolean hasCsvFormat(MultipartFile file) {
         String type="text/csv";
-        long size=2000;
+        long size=400;
         //other validations here
         if(!type.equals(file.getContentType()))
          return false;
@@ -39,12 +41,14 @@ public class FileServiceImpl implements FileService{
         }
     }
     private List<Transaction> csvToTransactions(InputStream inputStream){
+
         try (BufferedReader fileReader= new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());){
             List<Transaction> transactions=new ArrayList<Transaction>();
             List<CSVRecord> records=csvParser.getRecords();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
             for(CSVRecord csvRecord : records){
-                Transaction transaction=new Transaction(csvRecord.get("Payer Name"),csvRecord.get("Payee Name"));
+                Transaction transaction=new Transaction(csvRecord.get("id"), LocalDate.parse(csvRecord.get("date"),formatter),csvRecord.get("Payer Name"),csvRecord.get("Payer Account"),csvRecord.get("Payee Name"), csvRecord.get("Payee Account"),Double.parseDouble(csvRecord.get("amount")) );
                 transactions.add(transaction);
 
             }
