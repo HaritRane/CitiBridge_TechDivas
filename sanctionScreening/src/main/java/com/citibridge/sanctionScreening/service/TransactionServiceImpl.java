@@ -19,12 +19,14 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public void validateTransactions() {
+    public String validateTransactions(List<Transaction> transactions) {
+int val_pass=0;
+int val_fail=0;
         LocalDate currentDate=LocalDate.now();
 
          String DOUBLE_PATTERN = "^(?!0\\.0\\d{2})\\d{1,10}(\\.\\d{1,2})?$";
          Pattern pattern = Pattern.compile(DOUBLE_PATTERN);
-        List<Transaction> transactions=transactionRepo.findAll();
+        //List<Transaction> transactions=transactionRepo.findAll();
         for(Transaction transaction:transactions){
             boolean flag=true;
             if(transaction.getId().length()!=12){
@@ -40,15 +42,18 @@ public class TransactionServiceImpl implements TransactionService{
             }
             if(flag){
                 transaction.setStatus("Validation-pass");
+                val_pass++;
+
             }else{
                 transaction.setStatus("Validation-fail");
+              val_fail++;
             }
 
 
         }
 
         transactionRepo.saveAll(transactions);
-
+        return "Validation pass"+val_pass+"/nValidation fail"+val_fail;
 
     }
 }

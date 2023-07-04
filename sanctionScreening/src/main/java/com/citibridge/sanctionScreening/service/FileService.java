@@ -7,5 +7,6 @@ import java.io.IOException;
 public interface FileService {
     boolean hasCsvFormat(MultipartFile file);
 
-    void processAndSaveData(MultipartFile file) throws IOException;
+    String processAndSaveData(MultipartFile file) throws IOException;
+    int getNumberOfRecords();
 }

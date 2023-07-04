@@ -1,5 +1,9 @@
 package com.citibridge.sanctionScreening.service;
 
+import com.citibridge.sanctionScreening.entity.Transaction;
+
+import java.util.List;
+
 public interface TransactionService {
-    void validateTransactions();
+    String validateTransactions(List<Transaction> transactions);
 }
