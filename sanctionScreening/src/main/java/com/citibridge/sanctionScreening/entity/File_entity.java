@@ -1,10 +1,7 @@
 package com.citibridge.sanctionScreening.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "file")
@@ -12,14 +9,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class File_entity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String fileId;
+    private long fileId;
 
-
+    @Column(unique = true)
     private String fileName;
+    @Column(unique = true)
+    private String filePath;
 
     public File_entity(String fileName) {
         this.fileName = fileName;

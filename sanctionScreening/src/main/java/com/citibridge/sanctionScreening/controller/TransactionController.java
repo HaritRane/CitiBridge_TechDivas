@@ -1,5 +1,6 @@
 package com.citibridge.sanctionScreening.controller;
 
+import com.citibridge.sanctionScreening.repo.FileRepo;
 import com.citibridge.sanctionScreening.repo.TransactionRepo;
 import com.citibridge.sanctionScreening.response.ResponseMessage;
 import com.citibridge.sanctionScreening.service.TransactionService;
@@ -16,10 +17,11 @@ public class TransactionController {
     TransactionService transactionService;
     @Autowired
     TransactionRepo transactionRepo;
-
-    @PatchMapping("/{fileId}/validate")
-    public ResponseEntity<ResponseMessage> validateTransactions(@PathVariable String fileId){
-       String res= transactionService.validateTransactions(transactionRepo.getAllTransaction(fileId));
+@Autowired
+    FileRepo fileRepo;
+    @PatchMapping("/{fileName}/validate")
+    public ResponseEntity<ResponseMessage> validateTransactions(@PathVariable String fileName) {
+        String res = transactionService.validateTransactions(transactionRepo.getAllTransaction(fileRepo.findByFileName(fileName).getFileId()));
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(res));
     }
 

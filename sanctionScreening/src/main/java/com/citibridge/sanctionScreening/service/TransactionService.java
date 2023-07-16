@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TransactionService {
     String validateTransactions(List<Transaction> transactions);
+    String screenTransactions(List<Transaction> transactions);
 }
