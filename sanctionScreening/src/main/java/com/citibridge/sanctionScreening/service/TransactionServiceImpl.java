@@ -1,6 +1,7 @@
 package com.citibridge.sanctionScreening.service;
 
 import com.citibridge.sanctionScreening.entity.Transaction;
+import com.citibridge.sanctionScreening.repo.KeywordRepo;
 import com.citibridge.sanctionScreening.repo.TransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,12 @@ import java.util.regex.Pattern;
 public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private final TransactionRepo transactionRepo;
+    @Autowired
+    private final KeywordRepo keywordRepo;
 
-    public TransactionServiceImpl(TransactionRepo transactionRepo) {
+    public TransactionServiceImpl(TransactionRepo transactionRepo, KeywordRepo keywordRepo) {
         this.transactionRepo = transactionRepo;
+        this.keywordRepo = keywordRepo;
     }
 
     @Override
@@ -33,19 +37,19 @@ public class TransactionServiceImpl implements TransactionService {
             if (transaction.getId().length()!=12) {
                 flag = false;
 
-
+                System.out.println(transaction.getId());
             } else if (transaction.getDate().isBefore(currentDate)) {
                 flag = false;
-
-            } else if (transaction.getPayeeName().length() > 35 || transaction.getPayerName().length() > 35) {
+                System.out.println(transaction.getDate());
+            } else if (transaction.getPayeeName().length() > 35 || transaction.getPayerName().length() > 35 ||transaction.getPayerName().split("\\s+").length<2 ||transaction.getPayeeName().split("\\s+").length<2) {
                 flag = false;
-
+                System.out.println(transaction.getPayeeName().length() + transaction.getPayerName().length());
             } else if (transaction.getPayeeAccount().length() != 12 || transaction.getPayerAccount().length() != 12) {
                 flag = false;
-
+                System.out.println(transaction.getPayeeAccount().length() + transaction.getPayerAccount().length());
             } else if (!(pattern.matcher(Double.toString(transaction.getAmount())).matches())) {
                 flag = false;
-
+                System.out.println(transaction.getAmount());
             }
 
             if (flag) {
@@ -67,7 +71,22 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public String screenTransactions(List<Transaction> transactions) {
-        return null;
+    public String screenTransactions(long fileId) {
+        int screening_pass=0;
+        int screening_fail=0;
+        List<Transaction> transactions=transactionRepo.getValidTransaction(fileId);
+        for(Transaction transaction: transactions){
+            String payeeName=transaction.getPayeeName();
+            String payerName=transaction.getPayerName();
+            if(keywordRepo.findNameCount(payeeName)>0 || keywordRepo.findNameCount(payerName)>0){
+                transaction.setStatus("Screening-fail");
+                screening_fail++;
+            }else{
+                transaction.setStatus("Screening-pass");
+                screening_pass++;
+            }
+        }
+        transactionRepo.saveAll(transactions);
+        return "Screening Pass: "+screening_pass+"\n"+"Screening Fail: "+screening_fail;
     }
 }

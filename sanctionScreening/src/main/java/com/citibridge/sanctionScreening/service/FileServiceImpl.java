@@ -29,6 +29,7 @@ public class FileServiceImpl implements FileService {
     private FileRepo fileRepo;
     private int noOfRecords;
 
+    public boolean isUpload=false;
 
     @Override
     public boolean hasCsvFormat(MultipartFile file) {
@@ -50,17 +51,10 @@ public class FileServiceImpl implements FileService {
                 return "Not valid file.Column is missing";
             } else {
 
-                String filePath = "C:\\Users\\raneh\\Downloads\\demo" + "\\" + file.getOriginalFilename();
-                File_entity file_entity = fileRepo.save(File_entity.builder()
-                        .fileName(file.getOriginalFilename())
-                        .filePath(filePath).build());
-                file.transferTo(new File(filePath));
-                repo.saveAll(transactions);
 
-                if (file_entity != null) {
-                    return "File Upload Done. ";
-                }
-                return "Archiving files failed.";
+                repo.saveAll(transactions);
+return "File upload done";
+
 
             }
 
@@ -87,10 +81,16 @@ public class FileServiceImpl implements FileService {
             int headers = csvParser.getHeaderMap().size();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             if (headers == 7) {
-                File_entity file1 = new File_entity(file.getOriginalFilename());
-                fileRepo.save(file1);
+                String filePath = "C:\\Users\\raneh\\Downloads\\demo" + "\\" + file.getOriginalFilename();
+                File_entity file_entity = fileRepo.save(File_entity.builder()
+                        .fileName(file.getOriginalFilename())
+                        .filePath(filePath).build());
+                file.transferTo(new File(filePath));
+                isUpload=true;
+                //File_entity file1 = new File_entity(file.getOriginalFilename());
+                //fileRepo.save(file1);
                 for (CSVRecord csvRecord : records) {
-                    Transaction transaction = new Transaction( csvRecord.get(0), file1.getFileId(), LocalDate.parse(csvRecord.get("date"), formatter), csvRecord.get("Payer Name"), csvRecord.get("Payer Account"), csvRecord.get("Payee Name"), csvRecord.get("Payee Account"), Double.parseDouble(csvRecord.get("amount")));
+                    Transaction transaction = new Transaction( csvRecord.get(0), file_entity.getFileId(), LocalDate.parse(csvRecord.get("date"), formatter), csvRecord.get("Payer Name"), csvRecord.get("Payer Account"), csvRecord.get("Payee Name"), csvRecord.get("Payee Account"), Double.parseDouble(csvRecord.get("amount")));
                     transactions.add(transaction);
 
                 }

@@ -24,5 +24,6 @@ public interface TransactionRepo extends JpaRepository<Transaction, String> {
     @Query(value = "select * from transaction where file_id=?1 and status=\"Screening-fail\" ", nativeQuery = true)
     List<Transaction> getScreenFailTransaction(long fileId);
 
-
+//    @Query(value = "select t from transaction t join keyword k on lower(t.payee-name) =lower(k.name) or lower(t.payer-name)=lower(k.name) where file_id=?1",nativeQuery = true)
+//    List<Transaction> getScreenedTransactions(long fileId);
 }

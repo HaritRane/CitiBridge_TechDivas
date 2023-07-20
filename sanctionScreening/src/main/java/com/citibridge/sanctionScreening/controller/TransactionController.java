@@ -25,4 +25,10 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(res));
     }
 
+    @PatchMapping("/{fileName}/screen")
+    public ResponseEntity<ResponseMessage> screenTransactions(@PathVariable String fileName){
+        String res = transactionService.screenTransactions(fileRepo.findByFileName(fileName).getFileId());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(res));
+    }
+
 }
