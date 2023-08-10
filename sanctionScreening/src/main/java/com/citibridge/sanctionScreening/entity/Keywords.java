@@ -1,14 +1,14 @@
 package com.citibridge.sanctionScreening.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "keyword")
 public class Keywords {
     @Id
@@ -16,8 +16,11 @@ public class Keywords {
     private long id;
 
     private String name;
-
+private long occurrences;
     public Keywords(String name) {
         this.name = name;
+    }
+    public void occured(){
+        this.occurrences++;
     }
 }

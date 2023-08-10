@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface KeywordRepo extends JpaRepository<Keywords,Long> {
     @Query(value = "select count(*) from keyword where lower(name) = lower(?1)",nativeQuery = true)
     int findNameCount(String name);
+    Keywords findByName(String name);
 }

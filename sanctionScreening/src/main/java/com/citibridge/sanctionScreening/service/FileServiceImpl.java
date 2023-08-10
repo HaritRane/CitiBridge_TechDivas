@@ -62,8 +62,10 @@ return "File upload done";
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error");
+            fileRepo.delete(fileRepo.findByFileName(file.getOriginalFilename()));
+            return "Columns cant be recognized.";
         }
-        return null;
+
     }
 
     @Override

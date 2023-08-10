@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Key;
 import java.util.List;
 
 @RestController
@@ -27,4 +28,10 @@ public class KeywordController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Added keywords"));
     }
+
+    @GetMapping
+    public List<Keywords> getKeywords(){
+        return keywordRepo.findAll();
+    }
+
 }
