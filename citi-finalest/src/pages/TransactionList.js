@@ -80,6 +80,31 @@ const TransactionList = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+const handleDownload = async () => {
+try {
+ const response = await axios.get(`http://localhost:8080/transactions/${selectedOption1}/get-screen-fail-transactions` );
+      const jsonData = response.data;      
+      // Convert JSON to CSV
+      jsonexport(jsonData, (err, csv) => {
+        if (err) {
+          console.error('Error converting JSON to CSV:', err);
+          return;
+        }
+
+        // Create a Blob from CSV data
+        const blob = new Blob([csv], { type: 'text/csv' });
+
+        // Create a download link
+        const downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.download = `${selectedOption1}.csv`; 
+        // Trigger the download
+        downloadLink.click();
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+}
 
   useEffect(() => {
     // Replace 'YOUR_DROPDOWN_API_ENDPOINT' with the actual API endpoint to fetch the dropdown options
@@ -194,6 +219,7 @@ const TransactionList = () => {
           </MenuItem>
         ))}
       </Select>
+<Button variant="contained" onClick={handleDownload}>Download Screen-Fail</Button>
       {patchApiResponse &&
       <table className="corner-table">
         
