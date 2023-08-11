@@ -1,0 +1,68 @@
+.result{
+    font-size:x-large;
+    color: aliceblue;
+    
+}
+.drop-down{
+    background-color: #1976D2;
+    color: #000; /* Set the text color to black */
+    border: 1px solid #ccc; /* Add a border to the dropdown for better visibility */
+    padding: 5px; 
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+   width: fit-content;
+   height: fit-content;
+   margin-right: 100px;;
+   
+}
+
+.drop-down-container{
+    display: flex;
+    flex-direction: row;
+    gap: 20px; 
+    
+}
+
+.screening-pass-row {
+    background-color: #abcfab; /* Green color */
+  }
+  
+.screening-fail-row {
+    background-color: #dc9ea4; /* Red color */
+  }
+.validation-fail-row {
+    background-color: #dedba7; /* Yellow color */
+  }
+
+ 
+.screening-fail-row:hover {
+  background-color: #f1b2b2; /* Pale color for hover */
+}
+
+.screening-pass-row:hover {
+    background-color: #c0e4c1; /* Pale color for hover */
+  }
+.validation-fail-row:hover {
+    background-color: #eaedb6; /* Pale color for hover */
+  }
+  .corner-table {
+    border-collapse: collapse;
+    border: 1px solid #000;
+    background-color: white;
+    width: 300px; /* Adjust the width as needed */
+  font-size: 16px; /* Adjust the font size as needed */
+  padding-right: 10px;
+  }
+  
+  .corner-table th,
+  .corner-table td {
+    border: 1px solid #000;
+    padding: 5px;
+   padding-bottom: 10px;
+  
+  }
+  
+ 
+ .table-head{
+    background-color: #1976D2;
+ }
